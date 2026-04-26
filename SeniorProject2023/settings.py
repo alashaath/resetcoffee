@@ -22,6 +22,8 @@ INSTALLED_APPS = [
     'SeniorProjectApp',
     'Cart',
     'django_bootstrap5',
+    'cloudinary_storage',
+    'cloudinary',
 ]
 
 MIDDLEWARE = [
@@ -85,3 +87,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dpdn9rupc',
+    'API_KEY': '354895783521775',
+    'API_SECRET': 'uXHBTSDXzSy_nfaRM7bU5NWrijs',
+}
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
