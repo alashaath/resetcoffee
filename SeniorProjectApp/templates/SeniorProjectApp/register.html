@@ -1,37 +1,85 @@
+<!-- ═══════════ register.html ═══════════ -->
 {% extends 'SeniorProjectApp/base.html' %}
-
 {% load static %}
 
 {% block head %}
-  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+<style>
+    .auth-wrap {
+        max-width: 420px;
+        margin: 4rem auto;
+        padding: 0 2rem 4rem;
+    }
+    .auth-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 2rem;
+        color: var(--roast);
+        font-weight: 400;
+        margin-bottom: 0.4rem;
+    }
+    .auth-sub {
+        color: var(--muted);
+        font-size: 0.85rem;
+        margin-bottom: 2.5rem;
+    }
+    .auth-wrap .form-group { margin-bottom: 1.25rem; }
+    .auth-wrap label {
+        display: block;
+        font-size: 0.65rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--mid);
+        margin-bottom: 0.45rem;
+    }
+    .auth-wrap input, .auth-wrap select, .auth-wrap textarea {
+        width: 100%;
+        padding: 0.7rem 1rem;
+        border: 1px solid var(--border);
+        background: #fff;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.9rem;
+        color: var(--dark);
+        outline: none;
+        transition: border 0.2s;
+        border-radius: 0;
+    }
+    .auth-wrap input:focus,
+    .auth-wrap select:focus { border-color: var(--amber); }
+    .auth-wrap p { margin-bottom: 1.25rem; }
+    .auth-submit {
+        width: 100%;
+        background: var(--roast);
+        color: var(--cream);
+        padding: 0.9rem;
+        border: none;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.78rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        cursor: pointer;
+        margin-top: 0.5rem;
+        font-weight: 500;
+        transition: background 0.2s;
+    }
+    .auth-submit:hover { background: var(--amber); }
+    .auth-footer {
+        text-align: center;
+        margin-top: 1.5rem;
+        font-size: 0.82rem;
+        color: var(--muted);
+    }
+    .auth-footer a { color: var(--amber); text-decoration: none; }
+</style>
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <div class="text-center">
-                <h1 class="display-4 fw-bolder" style="color: white;">Create Your Account</h1>
-                <form method="POST" action="{% url 'register' %}">
-                    {% csrf_token %}
-                    
-                    {{ form.as_p }}
-                    <br/><br/>
-                    <button type="submit" class="btn btn-secondary">
-                        Sign Up
-                    </button>
-
-                </form>
-            </div>
-        </div>
-    </div>
+<div class="auth-wrap">
+    <h1 class="auth-title">Create an account.</h1>
+    <p class="auth-sub">Join us to start ordering your favorites.</p>
+    <form method="POST" action="{% url 'register' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="auth-submit">Sign Up</button>
+    </form>
+    <p class="auth-footer">Already have an account? <a href="{% url 'login' %}">Sign in</a></p>
 </div>
-
-<br></br>
-<br></br>
-<br></br>
-<br></br>
-<br></br>
-<br></br>
-<br></br>
 {% endblock %}

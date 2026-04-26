@@ -1,26 +1,61 @@
-<!-- In your template file -->
-<button id="checkout-button">Checkout</button>
-<script type="text/javascript">
-    // Load Stripe.js on your website.
-    var stripe = Stripe('{{ STRIPE_PUBLIC_KEY }}');
+<!-- ═══════════════════════════════════════════════════════
+     checkout.html
+     ═══════════════════════════════════════════════════════ -->
+{% extends 'SeniorProjectApp/base.html' %}
 
-    // When the user clicks on the button
+{% block content %}
+<style>
+    .checkout-wrap {
+        max-width: 480px;
+        margin: 4rem auto;
+        padding: 0 2rem;
+        text-align: center;
+    }
+    .checkout-wrap h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2rem;
+        color: var(--roast);
+        font-weight: 400;
+        margin-bottom: 0.6rem;
+    }
+    .checkout-wrap p {
+        color: var(--muted);
+        font-size: 0.88rem;
+        line-height: 1.7;
+        margin-bottom: 2.5rem;
+    }
+    #checkout-button {
+        background: var(--roast);
+        color: var(--cream);
+        padding: 1rem 3rem;
+        border: none;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.8rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        cursor: pointer;
+        font-weight: 500;
+        transition: background 0.2s;
+        width: 100%;
+    }
+    #checkout-button:hover { background: var(--amber); }
+</style>
+
+<div class="checkout-wrap">
+    <h1>Complete Your Order</h1>
+    <p>You'll be redirected to our secure payment page to finalize your order.</p>
+    <button id="checkout-button">Pay Securely with Stripe</button>
+</div>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    var stripe = Stripe('{{ STRIPE_PUBLIC_KEY }}');
     document.getElementById('checkout-button').addEventListener('click', function() {
         fetch('/create-checkout-session/', { method: 'POST' })
-            .then(function(response) {
-                return response.json();
-            })
-            .then(function(session) {
-                return stripe.redirectToCheckout({ sessionId: session.id });
-            })
-            .then(function(result) {
-                // If redirectToCheckout fails due to a browser or network error
-                if (result.error) {
-                    alert(result.error.message);
-                }
-            })
-            .catch(function(error) {
-                console.error('Error:', error);
-            });
+            .then(res => res.json())
+            .then(session => stripe.redirectToCheckout({ sessionId: session.id }))
+            .then(result => { if (result.error) alert(result.error.message); })
+            .catch(err => console.error('Error:', err));
     });
 </script>
+{% endblock %}

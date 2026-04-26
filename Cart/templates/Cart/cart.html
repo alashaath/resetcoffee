@@ -1,65 +1,201 @@
 {% extends 'SeniorProjectApp/base.html' %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2 style="color:white">Your Cart</h2>
-    <table class="table">
+<style>
+    .cart-wrap {
+        max-width: 680px;
+        margin: 0 auto;
+        padding: 3rem 2rem;
+    }
+    .cart-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 2rem;
+        color: var(--roast);
+        font-weight: 400;
+        margin-bottom: 0.4rem;
+    }
+    .cart-sub {
+        font-size: 0.82rem;
+        color: var(--muted);
+        margin-bottom: 2.5rem;
+    }
+    .cart-empty {
+        text-align: center;
+        padding: 4rem 0;
+    }
+    .cart-empty p {
+        color: var(--muted);
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+    }
+    .cart-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 2rem;
+    }
+    .cart-table thead tr {
+        border-bottom: 1px solid var(--border);
+    }
+    .cart-table th {
+        font-size: 0.62rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 500;
+        padding: 0 0 0.75rem;
+        text-align: left;
+    }
+    .cart-table th:last-child { text-align: right; }
+    .cart-table td {
+        padding: 1.1rem 0;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.88rem;
+        color: var(--roast);
+        vertical-align: middle;
+    }
+    .cart-table td:last-child { text-align: right; }
+    .item-name-cell { font-weight: 500; }
+    .item-price-cell { color: var(--muted); }
+    .item-qty-cell {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--foam);
+        border: 1px solid var(--border);
+        width: 32px;
+        height: 32px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--roast);
+    }
+    .cart-summary {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        padding: 1.25rem 0;
+        border-top: 1px solid var(--border);
+        margin-bottom: 2rem;
+    }
+    .summary-label {
+        font-size: 0.7rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--muted);
+    }
+    .summary-total {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.5rem;
+        color: var(--roast);
+    }
+    .cart-actions {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+    .toast-msg {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background: var(--roast);
+        color: var(--cream);
+        padding: 0.85rem 1.5rem;
+        font-size: 0.82rem;
+        letter-spacing: 0.04em;
+        border-left: 3px solid var(--amber);
+        opacity: 0;
+        transform: translateY(8px);
+        transition: opacity 0.3s, transform 0.3s;
+        pointer-events: none;
+        z-index: 999;
+    }
+    .toast-msg.show { opacity: 1; transform: translateY(0); }
+</style>
+
+<div class="cart-wrap">
+    <h1 class="cart-title">Your Cart</h1>
+    <p class="cart-sub">{{ cart_items|length }} item{% if cart_items|length != 1 %}s{% endif %}</p>
+
+    {% if cart_items %}
+    <table class="cart-table">
         <thead>
             <tr>
-                <th scope="col" style="color:white">Item</th>
-                <th scope="col" style="color:white">Price</th>
-                <th scope="col" style="color:white">Quantity</th>
+                <th>Item</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
-          {% for item in cart_items %}
-            <tr style="color: white">
-                <td>{{ item.product.name }}</td>
-                <td>${{ item.product.price }}</td>
-                <td>{{ item.quantity }}</td>
+            {% for item in cart_items %}
+            <tr id="cart-row-{{ item.product.id }}">
+                <td class="item-name-cell">{{ item.product.name }}</td>
+                <td class="item-price-cell">${{ item.product.price }}</td>
+                <td><span class="item-qty-cell">{{ item.quantity }}</span></td>
                 <td>
-                    <button class="btn btn-danger remove-from-cart-btn" data-product-id="{{ item.product.id }}">Remove</button>
-                </td>                       
+                    <button class="btn-danger-reset remove-from-cart-btn" data-product-id="{{ item.product.id }}">
+                        Remove
+                    </button>
+                </td>
             </tr>
-          {% endfor %}
+            {% endfor %}
         </tbody>
     </table>
-    
-    <p style="color:white">Subtotal: ${{ total_price|floatformat:2 }}</p>
+
+    <div class="cart-summary">
+        <span class="summary-label">Subtotal</span>
+        <span class="summary-total" id="cart-total">${{ total_price|floatformat:2 }}</span>
+    </div>
+
+    <div class="cart-actions">
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'checkout' %}" class="btn-reset-primary">Proceed to Checkout</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="btn-reset-primary">Log in to Checkout</a>
+        {% endif %}
+        <a href="{% url 'menu' %}" class="btn-reset-outline">Continue Shopping</a>
+    </div>
+
+    {% else %}
+    <div class="cart-empty">
+        <p>Your cart is empty.</p>
+        <a href="{% url 'menu' %}" class="btn-reset-primary">Browse the Menu</a>
+    </div>
+    {% endif %}
 </div>
 
-</br></br></br></br></br></br></br></br></br></br></br>
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-8">
-            {% if request.user.is_authenticated %}
-                <a href="{% url 'checkout' %}" class="btn btn-primary">Checkout</a>
-            {% else %}
-                <a href="{% url 'login' %}" class="btn btn-primary">Log in to Checkout</a>
-            {% endif %}
-        </div>
-    </div>
-</div>
+<div class="toast-msg" id="cart-toast"></div>
+
 <script>
-    $(document).ready(function () {
-        $(".remove-from-cart-btn").on('click', function () {
+    function showToast(msg) {
+        const t = document.getElementById('cart-toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2800);
+    }
+
+    $(document).ready(function() {
+        $(".remove-from-cart-btn").on('click', function() {
             var productId = $(this).data("product-id");
+            var row = $('#cart-row-' + productId);
 
             $.ajax({
                 type: 'POST',
                 url: '{% url "cart_delete" %}',
                 data: {
-                    'action': 'post',
-                    'product_id': productId,
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    action: 'post',
+                    product_id: productId,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
                 },
                 dataType: 'json',
-                success: function (data) {
-                    alert('Item removed from the cart!');
-                    location.reload(); 
+                success: function(data) {
+                    row.fadeOut(300, function() { $(this).remove(); });
+                    document.getElementById('cart_quantity').textContent = data.qty;
+                    showToast('Item removed from your cart.');
+                    /* Reload after short delay to refresh subtotal */
+                    setTimeout(() => location.reload(), 900);
                 },
-                error: function (data) {
-                    console.log('Error:', data);
+                error: function() {
+                    showToast('Could not remove item. Please try again.');
                 }
             });
         });

@@ -1,0 +1,103 @@
+<!-- ═══════════ aboutus.html ═══════════ -->
+{% extends 'SeniorProjectApp/base.html' %}
+{% load static %}
+
+{% block head %}
+<style>
+    .about-body {
+        max-width: 680px;
+        margin: 0 auto;
+        padding: 3rem 2rem;
+    }
+    .about-lead {
+        color: var(--muted);
+        line-height: 1.9;
+        font-size: 0.95rem;
+        font-weight: 300;
+        margin-bottom: 1.5rem;
+    }
+    .about-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--border);
+        margin: 2.5rem 0;
+    }
+    .about-stat {
+        background: var(--foam);
+        padding: 1.5rem;
+        text-align: center;
+    }
+    .about-stat .num {
+        font-family: 'Playfair Display', serif;
+        font-size: 2rem;
+        color: var(--amber);
+        margin-bottom: 0.2rem;
+    }
+    .about-stat .lbl {
+        font-size: 0.65rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--muted);
+    }
+    .photo-grid {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 1px;
+        background: var(--border);
+        margin-bottom: 2.5rem;
+    }
+    .photo-grid img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .photo-grid-right { display: grid; grid-template-rows: 1fr 1fr; gap: 1px; background: var(--border); }
+    .hours-section { margin-top: 2.5rem; }
+    .hours-eyebrow {
+        font-size: 0.62rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--amber);
+        margin-bottom: 1rem;
+    }
+    .hour-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.6rem 0;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.85rem;
+    }
+    .hour-row .day { color: var(--roast); font-weight: 500; }
+    .hour-row .time { color: var(--muted); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <p class="eyebrow">Who we are</p>
+    <h1>Our Story</h1>
+</div>
+
+<div class="about-body">
+    <p class="about-lead">We are a small coffee shop that specializes in artisanal coffee blends and fresh baked goods. Our coffee beans are carefully selected from the best coffee farms in the world and our baked goods are made with the finest ingredients.</p>
+    <p class="about-lead">Reset is about more than coffee — it's a place to slow down, breathe, and reconnect with what matters.</p>
+
+    <div class="photo-grid">
+        <img src="{% static 'CoffeeRoomUpdated.jpg' %}" alt="Our café">
+        <div class="photo-grid-right">
+            <img src="{% static 'Machine.jpg' %}" alt="Our espresso machine">
+            <img src="{% static 'Plants.jpg' %}" alt="Our space">
+        </div>
+    </div>
+
+    <div class="about-stats">
+        <div class="about-stat"><div class="num">2023</div><div class="lbl">Founded</div></div>
+        <div class="about-stat"><div class="num">100%</div><div class="lbl">Specialty Grade</div></div>
+        <div class="about-stat"><div class="num">Local</div><div class="lbl">Mission, TX</div></div>
+    </div>
+
+    <div class="hours-section">
+        <p class="hours-eyebrow">Hours</p>
+        <div class="hour-row"><span class="day">Monday – Friday</span><span class="time">6:30 AM – 8:30 PM</span></div>
+        <div class="hour-row"><span class="day">Saturday</span><span class="time">9:00 AM – 8:30 PM</span></div>
+        <div class="hour-row"><span class="day">Sunday</span><span class="time">1:00 PM – 8:30 PM</span></div>
+    </div>
+</div>
+{% endblock %}

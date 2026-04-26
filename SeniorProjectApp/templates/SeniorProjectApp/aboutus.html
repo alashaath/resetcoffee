@@ -1,53 +1,368 @@
-
 {% extends 'SeniorProjectApp/base.html' %}
-
 {% load static %}
 
 {% block head %}
-  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-  <style>
-    .photo-grid {
-        display: flex;
-        flex-wrap: wrap;
-        max-width: 800px;
-        margin: 0 auto;
-    }
+<style>
+/* ── ABOUT HERO ── */
+.about-hero {
+    background: #1A1208;
+    padding: 7rem 3rem 5rem;
+    border-bottom: 1px solid rgba(200,130,26,0.12);
+}
+.about-hero-eyebrow {
+    font-size: 0.6rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: #C8821A;
+    display: block;
+    margin-bottom: 1.5rem;
+}
+.about-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    color: #F5EFE0;
+    font-weight: 400;
+    line-height: 1.05;
+    max-width: 750px;
+    margin-bottom: 1.5rem;
+}
+.about-hero-sub {
+    color: rgba(245,239,224,0.45);
+    font-size: 0.92rem;
+    line-height: 1.9;
+    font-weight: 300;
+    max-width: 480px;
+}
 
-    .vertical-photo {
-        width: 33.33%;
-    }
+/* ── INTRO ── */
+.about-intro {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    padding: 6rem 3rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    align-items: start;
+}
+.about-intro-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: #C8821A;
+    display: block;
+    margin-bottom: 2rem;
+}
+.about-intro h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+    font-weight: 400;
+    color: #2D1B00;
+    line-height: 1.2;
+    position: sticky;
+    top: 5rem;
+}
+.about-intro-body p {
+    color: #7A6040;
+    font-size: 0.95rem;
+    line-height: 2;
+    font-weight: 300;
+    margin-bottom: 1.75rem;
+}
 
-    .horizontal-photo {
-        width: 66.66%;
-    }
+/* ── PHOTO GALLERY (contained, not stretched) ── */
+.photo-gallery {
+    padding: 2rem 3rem 5rem;
+    background: #F5EFE0;
+}
+.gallery-eyebrow {
+    font-size: 0.6rem;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: #C8821A;
+    display: block;
+    margin-bottom: 2rem;
+}
+.gallery-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr;
+    grid-template-rows: 280px 280px;
+    gap: 8px;
+}
+.gallery-item {
+    overflow: hidden;
+    background: #2D1B00;
+}
+.gallery-item.tall {
+    grid-row: span 2;
+}
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 0.5s ease;
+}
+.gallery-item:hover img { transform: scale(1.04); }
 
-    .photo {
-        width: 100%;
-        height: auto;
-        display: block;
-    }
-  </style>
+/* ── VALUES ── */
+.values-section {
+    padding: 6rem 3rem;
+    background: #FAF4E8;
+    border-top: 1px solid rgba(200,130,26,0.12);
+}
+.values-eyebrow {
+    font-size: 0.6rem;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: #C8821A;
+    display: block;
+    margin-bottom: 3rem;
+}
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 1px;
+    background: rgba(200,130,26,0.12);
+}
+.value-block { background: #FAF4E8; padding: 2.5rem 2rem; transition: background 0.2s; }
+.value-block:hover { background: #fff; }
+.value-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: rgba(200,130,26,0.18);
+    line-height: 1;
+    margin-bottom: 1.25rem;
+}
+.value-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #2D1B00; font-weight: 400; margin-bottom: 0.75rem; }
+.value-body { font-size: 0.82rem; color: #7A6040; line-height: 1.8; font-weight: 300; }
+
+/* ── TEAM ── */
+.team-section {
+    padding: 6rem 3rem;
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 5rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    align-items: center;
+}
+.team-img {
+    overflow: hidden;
+    background: #2D1B00;
+    height: 440px;
+    flex-shrink: 0;
+}
+.team-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    transition: transform 0.6s ease;
+}
+.team-img:hover img { transform: scale(1.03); }
+.team-content span {
+    font-size: 0.6rem;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: #C8821A;
+    display: block;
+    margin-bottom: 1.5rem;
+}
+.team-content h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+    font-weight: 400;
+    color: #2D1B00;
+    line-height: 1.15;
+    margin-bottom: 1.5rem;
+}
+.team-content p {
+    color: #7A6040;
+    font-size: 0.92rem;
+    line-height: 1.95;
+    font-weight: 300;
+    margin-bottom: 1.25rem;
+}
+.about-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #C8821A;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(200,130,26,0.35);
+    padding-bottom: 0.25rem;
+    transition: all 0.2s;
+    margin-top: 0.5rem;
+}
+.about-link:hover { gap: 1.25rem; border-color: #C8821A; color: #C8821A; }
+
+/* ── LOCATION ── */
+.location-section { background: #1A1208; padding: 6rem 3rem; }
+.location-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    align-items: start;
+}
+.location-eyebrow { font-size: 0.6rem; letter-spacing: 0.26em; text-transform: uppercase; color: #C8821A; display: block; margin-bottom: 1.5rem; }
+.location-title { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 2.5vw, 2rem); color: #F5EFE0; font-weight: 400; line-height: 1.15; margin-bottom: 1rem; }
+.location-body { color: rgba(245,239,224,0.4); font-size: 0.88rem; line-height: 1.9; font-weight: 300; margin-bottom: 2rem; }
+.hours-list { list-style: none; padding: 0; margin: 0 0 2rem; }
+.hours-list li { display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid rgba(200,130,26,0.1); font-size: 0.85rem; }
+.hours-list .day { color: rgba(245,239,224,0.45); }
+.hours-list .time { color: #E8A840; }
+.location-map { border: none; display: block; width: 100%; filter: grayscale(40%); }
+
+/* ── ORDER CTA ── */
+.order-cta-section { background: #C8821A; padding: 5rem 3rem; text-align: center; }
+.order-cta-section h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 3rem); color: #1A1208; font-weight: 400; margin-bottom: 0.5rem; }
+.order-cta-section p { color: rgba(26,18,8,0.6); font-size: 0.88rem; margin-bottom: 2rem; font-weight: 300; }
+.order-btn { display: inline-block; background: #1A1208; color: #F5EFE0; padding: 0.9rem 2.5rem; font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; font-weight: 500; transition: background 0.2s; }
+.order-btn:hover { background: #2D1B00; color: #F5EFE0; }
+
+@media (max-width: 768px) {
+    .about-hero { padding: 5rem 1.5rem 3rem; }
+    .about-intro { grid-template-columns: 1fr; gap: 2rem; padding: 4rem 1.5rem; }
+    .about-intro h2 { position: static; }
+    .photo-gallery { padding: 2rem 1.5rem 4rem; }
+    .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: 200px 200px 200px; }
+    .gallery-item.tall { grid-row: span 1; }
+    .values-grid { grid-template-columns: 1fr; }
+    .team-section { grid-template-columns: 1fr; gap: 2.5rem; padding: 4rem 1.5rem; }
+    .team-img { height: 320px; }
+    .location-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .location-section { padding: 4rem 1.5rem; }
+    .values-section { padding: 4rem 1.5rem; }
+}
+</style>
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1 class="mt-4 mb-4" style="color: white;">Our Story</h1>
-    <p style="color: white;">We are a small coffee shop that specializes in artisanal coffee blends and fresh baked goods. Our coffee beans are carefully selected from the best coffee farms in the world and our baked goods are made with the finest ingredients.</p>
-    <div class="container">
-        <div class="photo-grid">
-            <div class="vertical-photo">
-                <img src="static/CoffeeRoomUpdated.jpg" alt="Vertical Photo" class="img-fluid">
-            </div>
-            <div class="horizontal-photo">
-                <div class="photo">
-                    <img src="static/Machine.jpg" alt="Horizontal Photo 1" class="img-fluid">
-                </div>
-                <div class="photo">
-                    <img src="static/Plants.jpg" alt="Horizontal Photo 2" class="img-fluid">
-                </div>
-            </div>
+
+<!-- Dark text hero — no stretched image -->
+<div class="about-hero">
+    <span class="about-hero-eyebrow">McAllen, Texas · Est. 2023</span>
+    <h1>Born out of a love for great coffee.</h1>
+    <p class="about-hero-sub">Reset Specialty Coffee is a small shop in McAllen, Texas. We source carefully, brew intentionally, and believe every cup should be something worth pausing for.</p>
+</div>
+
+<!-- Editorial intro -->
+<div class="about-intro">
+    <div>
+        <span class="about-intro-label">Our story</span>
+        <h2>A place to slow down and reset.</h2>
+    </div>
+    <div class="about-intro-body">
+        <p>We started Reset because we believed McAllen deserved a specialty coffee experience — one that takes the craft seriously without taking itself too seriously.</p>
+        <p>Our name says it all. Whatever you're carrying when you walk in, we want you to feel like you can set it down for a moment. Reset. Breathe. Have something beautiful to drink.</p>
+        <p>We work exclusively with specialty-grade beans scored above 80 points on the SCA scale — grown with intention, processed with care, and selected for their character.</p>
+    </div>
+</div>
+
+<!-- Contained photo gallery -->
+<div class="photo-gallery">
+    <span class="gallery-eyebrow">The shop</span>
+    <div class="gallery-grid">
+        <div class="gallery-item tall">
+            <img src="{% static 'carousel1.jpg' %}" alt="The Reset team">
+        </div>
+        <div class="gallery-item">
+            <img src="{% static 'dynamic1.jpg' %}" alt="Latte art">
+        </div>
+        <div class="gallery-item">
+            <img src="{% static 'dynamic3.jpg' %}" alt="Espresso shot">
+        </div>
+        <div class="gallery-item">
+            <img src="{% static 'carousel2.jpg' %}" alt="Barista at work">
+        </div>
+        <div class="gallery-item">
+            <img src="{% static 'dynamic.jpg' %}" alt="Serving a customer">
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-xm7VjwMr2I4qj5s5n6nfe6e0q2WPgfuOrHwFf5e/5z7f5b10R9g7xO5HhuU/3F2Nv2" crossorigin="anonymous"></script>
 </div>
+
+<!-- Values -->
+<div class="values-section">
+    <span class="values-eyebrow">What we stand for</span>
+    <div class="values-grid">
+        <div class="value-block">
+            <div class="value-num">01</div>
+            <div class="value-title">Quality above all</div>
+            <div class="value-body">We use only specialty-grade beans, sourced for their flavor, their story, and the care behind their production.</div>
+        </div>
+        <div class="value-block">
+            <div class="value-num">02</div>
+            <div class="value-title">Craft in every cup</div>
+            <div class="value-body">From espresso to pour over, every drink is made with intention and attention. No shortcuts, no compromises.</div>
+        </div>
+        <div class="value-block">
+            <div class="value-num">03</div>
+            <div class="value-title">A place to belong</div>
+            <div class="value-body">We believe a great coffee shop is a community anchor. We're here for your daily ritual and your occasional reset.</div>
+        </div>
+    </div>
+</div>
+
+<!-- Team -->
+<div class="team-section">
+    <div class="team-img">
+        <img src="{% static 'carousel1.jpg' %}" alt="The Reset team">
+    </div>
+    <div class="team-content">
+        <span>The people</span>
+        <h2>Small team. Big passion.</h2>
+        <p>We're a tight-knit group of people who care deeply about what we do. Coffee is our craft, but hospitality is our heart.</p>
+        <p>We invest in our people the same way we invest in our coffee — with patience, intention, and a commitment to doing things right.</p>
+        <a href="https://www.instagram.com/resetspecialtycoffee/" target="_blank" class="about-link">
+            Follow us on Instagram
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+        </a>
+    </div>
+</div>
+
+<!-- Location & Hours -->
+<div class="location-section">
+    <div class="location-inner">
+        <div>
+            <span class="location-eyebrow">Visit us</span>
+            <h2 class="location-title">Come find us in McAllen.</h2>
+            <p class="location-body">We're open seven days a week. Come in for your morning ritual or an afternoon reset.</p>
+            <ul class="hours-list">
+                <li><span class="day">Monday – Friday</span><span class="time">7:30 AM – 8:30 PM</span></li>
+                <li><span class="day">Saturday</span><span class="time">7:30 AM – 8:30 PM</span></li>
+                <li><span class="day">Sunday</span><span class="time">1:00 PM – 7:30 PM</span></li>
+            </ul>
+            <a href="https://order.toasttab.com/online/resetspecialtycoffee" target="_blank" class="about-link">
+                Order Online
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+            </a>
+        </div>
+        <div>
+            <span class="location-eyebrow">Find us</span>
+            <iframe class="location-map"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2492.092528142061!2d-98.24833331035633!3d26.339000027241507!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8665a513a29b29fd%3A0x10fb5254376076eb!2sReset%20Specialty%20Coffee!5e0!3m2!1sen!2sus!4v1696026629466!5m2!1sen!2sus"
+                width="100%" height="380" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+    </div>
+</div>
+
+<!-- Order CTA -->
+<div class="order-cta-section">
+    <h2>Ready to order?</h2>
+    <p>Place your order online and pick it up in store.</p>
+    <a href="https://order.toasttab.com/online/resetspecialtycoffee" target="_blank" class="order-btn">Order Now</a>
+</div>
+
 {% endblock %}

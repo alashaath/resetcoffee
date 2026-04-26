@@ -1,69 +1,165 @@
 {% extends 'SeniorProjectApp/base.html' %}
-
 {% load static %}
 
 {% block content %}
-<section class="py-5">
-    <div class="container px-4 px-lg-5 my-5">
-        <div class="row gx-4 gx-lg-5 align-items-center">
-            <div class="col-md-4">
-                {% if item.image %}
-                    <img class="card-img-top mb-5 mb-md-0" src="{{ item.image.url }}" width="100" alt="{{ item.name }}" />
-                {% else %}
-                    <img class="card-img-top mb-5 mb-md-0" src="{% static 'default_image.png' %}" width="100" alt="{{ item.name }}" />
-                {% endif %}
-            </div>
-            <div class="col-md-6">
-                <h1 class="display-5 fw-bolder" style="color: white;">{{ item.name }}</h1>
-                <div class="fs-5 mb-5">
-                    <span style="color: white;">${{ item.price }}</span>
-                </div>
-                <p class="lead" style="color: white;">{{ item.description }}</p>
-                <div class="d-flex">
-                    <button class="btn btn-outline-dark flex-shrink-0" type="button" style="color: white;" value="{{ item.id }}" id="add-cart">
-                        <i class="bi-cart-fill me-1"></i>
-                        Add to cart
-                    </button>
-                </div>
-            </div>
+<style>
+    .detail-wrap {
+        max-width: 780px;
+        margin: 0 auto;
+        padding: 3rem 2rem;
+    }
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.72rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--amber);
+        text-decoration: none;
+        margin-bottom: 2.5rem;
+        transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--gold); }
+    .detail-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        align-items: start;
+    }
+    .detail-img {
+        width: 100%;
+        aspect-ratio: 1;
+        object-fit: cover;
+        display: block;
+        background: var(--espresso);
+    }
+    .detail-name {
+        font-family: 'Playfair Display', serif;
+        font-size: 2rem;
+        color: var(--roast);
+        font-weight: 400;
+        line-height: 1.1;
+        margin-bottom: 0.6rem;
+    }
+    .detail-price {
+        font-size: 1.25rem;
+        color: var(--amber);
+        font-weight: 500;
+        margin-bottom: 1.25rem;
+    }
+    .detail-desc {
+        color: var(--muted);
+        line-height: 1.85;
+        font-size: 0.92rem;
+        font-weight: 300;
+        margin-bottom: 2rem;
+    }
+    .add-cart-btn {
+        width: 100%;
+        background: var(--roast);
+        color: var(--cream);
+        padding: 0.9rem 2rem;
+        border: none;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.78rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        cursor: pointer;
+        font-weight: 500;
+        transition: background 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+    .add-cart-btn:hover { background: var(--amber); }
+    .add-cart-btn:disabled { background: var(--mid); cursor: not-allowed; }
+    .toast-msg {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background: var(--roast);
+        color: var(--cream);
+        padding: 0.85rem 1.5rem;
+        font-size: 0.82rem;
+        letter-spacing: 0.04em;
+        border-left: 3px solid var(--amber);
+        opacity: 0;
+        transform: translateY(8px);
+        transition: opacity 0.3s, transform 0.3s;
+        pointer-events: none;
+        z-index: 999;
+    }
+    .toast-msg.show { opacity: 1; transform: translateY(0); }
+    @media (max-width: 600px) {
+        .detail-grid { grid-template-columns: 1fr; }
+    }
+</style>
+
+<div class="detail-wrap">
+    <a href="{% url 'menu' %}" class="back-link">← Back to Menu</a>
+    <div class="detail-grid">
+        <div>
+            {% if item.image %}
+                <img src="{{ item.image.url }}" alt="{{ item.name }}" class="detail-img">
+            {% else %}
+                <img src="{% static 'default_image.png' %}" alt="{{ item.name }}" class="detail-img">
+            {% endif %}
+        </div>
+        <div>
+            <h1 class="detail-name">{{ item.name }}</h1>
+            <div class="detail-price">${{ item.price }}</div>
+            <p class="detail-desc">{{ item.description }}</p>
+            <button class="add-cart-btn" id="add-cart" value="{{ item.id }}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                </svg>
+                Add to Cart
+            </button>
         </div>
     </div>
-</section>
+</div>
+
+<div class="toast-msg" id="cart-toast"></div>
+
 <script>
-    $(document).on('click', '#add-cart', function(e){
+    function showToast(msg) {
+        const t = document.getElementById('cart-toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2800);
+    }
+
+    $(document).on('click', '#add-cart', function(e) {
         e.preventDefault();
         var productId = $(this).val();
-
-        // Check if the user is authenticated
         var isAuthenticated = '{{ request.user.is_authenticated }}';
-        
+
         if (isAuthenticated === 'True') {
-            // User is authenticated, proceed with adding to the cart
+            var btn = $(this);
+            btn.prop('disabled', true);
             $.ajax({
                 type: 'POST',
-                url: '{% url 'cart_add' %}',
+                url: '{% url "cart_add" %}',
                 data: {
                     product_id: productId,
                     csrfmiddlewaretoken: '{{ csrf_token }}',
                     action: 'post'
                 },
-                success: function(json){
-                    // Update the cart quantity display
-                    document.getElementById("cart_quantity").textContent = json.qty;
-
-                    // Display the success message
-                    alert('Item has been added to your cart.');
-
-                    // You can also use your preferred way to display the message, such as a notification library
+                success: function(json) {
+                    document.getElementById('cart_quantity').textContent = json.qty;
+                    showToast('{{ item.name }} added to your cart.');
+                    btn.prop('disabled', false);
                 },
-                error: function(xhr, errmsg, err){
-                    // Handle the error if needed
+                error: function() {
+                    showToast('Something went wrong. Please try again.');
+                    btn.prop('disabled', false);
                 }
             });
         } else {
-            // User is not authenticated, display a message or prompt to log in
-            alert('Please log in to add items to the cart.');
-            // Alternatively, you can redirect the user to the login page or show a login modal
+            showToast('Please log in to add items to your cart.');
+            setTimeout(() => { window.location.href = '{% url "login" %}'; }, 1800);
         }
     });
 </script>

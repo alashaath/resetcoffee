@@ -1,18 +1,50 @@
+<!-- ═══════════ payment_success.html ═══════════ -->
 {% extends 'SeniorProjectApp/base.html' %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8 text-center">
-            <h2 class="display-3 text-success">Payment Successful!</h2>
-            <p class="lead mt-3 text-white">Thank you for your purchase. Your order has been placed and is being processed.</p>
-            
-            <p class="text-white">If you have any questions about your order, please <a href="{% url 'home' %}" class="text-primary">contact us</a>.</p>
-            <div class="mt-4">
-                <a href="{% url 'menu' %}" class="btn btn-primary">Continue Shopping</a>
-            </div>
-        </div>
+<style>
+    .status-wrap {
+        max-width: 480px;
+        margin: 6rem auto;
+        padding: 0 2rem;
+        text-align: center;
+    }
+    .status-icon {
+        width: 56px;
+        height: 56px;
+        background: rgba(200,130,26,0.12);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+    }
+    .status-icon svg { width: 24px; height: 24px; color: var(--amber); }
+    .status-wrap h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2rem;
+        color: var(--roast);
+        font-weight: 400;
+        margin-bottom: 0.75rem;
+    }
+    .status-wrap p {
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1.7;
+        margin-bottom: 2rem;
+    }
+</style>
+
+<div class="status-wrap">
+    <div class="status-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
     </div>
-</br></br></br></br></br></br></br></br></br></br></br>
+    <h2>Order Confirmed</h2>
+    <p>Thank you for your purchase. Your order has been placed and is being prepared. We'll have it ready for you soon.</p>
+    <p>Questions? <a href="{% url 'home' %}" style="color:var(--amber);text-decoration:none;">Contact us</a>.</p>
+    <a href="{% url 'menu' %}" class="btn-reset-primary">Order Again</a>
 </div>
 {% endblock %}
+

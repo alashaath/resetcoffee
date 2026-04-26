@@ -1,0 +1,119 @@
+{% extends 'SeniorProjectApp/base.html' %}
+{% load static %}
+
+{% block head %}
+<style>
+    .hero {
+        position: relative;
+        overflow: hidden;
+        background: var(--dark);
+    }
+    .hero .carousel-item img {
+        height: 45vh;
+        width: 100%;
+        object-fit: cover;
+        object-position: center center;
+        opacity: 1;
+    }
+    .hero .carousel-item {
+        background: var(--dark);
+        overflow: hidden;
+    }
+    .hero .carousel-caption {
+        bottom: 50%;
+        transform: translateY(50%);
+        text-align: center;
+    }
+    .hero .carousel-caption h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(2.2rem, 6vw, 4rem);
+        color: var(--cream);
+        font-weight: 400;
+        line-height: 1.1;
+        margin-bottom: 0.75rem;
+    }
+    .hero .carousel-caption h3 {
+        font-size: 1rem;
+        font-weight: 300;
+        color: rgba(245,239,224,0.65);
+        letter-spacing: 0.05em;
+        margin-bottom: 2rem;
+    }
+    .hero .carousel-caption .button {
+        background: var(--amber);
+        color: var(--dark);
+        padding: 0.75rem 2rem;
+        font-size: 0.78rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        border: none;
+        font-weight: 500;
+        text-decoration: none;
+        transition: background 0.2s;
+        border-radius: 0;
+    }
+    .hero .carousel-caption .button:hover { background: var(--gold); }
+    .info-strip {
+        background: var(--espresso);
+        display: flex;
+        justify-content: center;
+        gap: 4rem;
+        padding: 1.2rem 2rem;
+        border-bottom: 1px solid rgba(200,130,26,0.15);
+    }
+    .strip-item .label {
+        font-size: 0.58rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 0.2rem;
+    }
+    .strip-item .val {
+        font-family: 'Playfair Display', serif;
+        font-size: 0.95rem;
+        color: var(--cream);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            {% for object in obj %}
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="{{ forloop.counter0 }}"
+                {% if forloop.first %}class="active"{% endif %}
+                aria-label="Slide {{ forloop.counter }}"></button>
+            {% endfor %}
+        </div>
+        <div class="carousel-inner">
+            {% for object in obj %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <img src="{{ object.image.url }}" class="d-block w-100" alt="{{ object.title }}">
+            </div>
+            {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+</div>
+
+<div class="info-strip">
+    <div class="strip-item text-center">
+        <div class="label">Hours Today</div>
+        <div class="val">6:30 AM – 8:30 PM</div>
+    </div>
+    <div class="strip-item text-center">
+        <div class="label">Location</div>
+        <div class="val">Mission, Texas</div>
+    </div>
+    <div class="strip-item text-center">
+        <div class="label">Specialty</div>
+        <div class="val">Artisanal Coffee</div>
+    </div>
+</div>
+{% endblock %}

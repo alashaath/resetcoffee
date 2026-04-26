@@ -11,14 +11,7 @@ urlpatterns = [
     path('login/', views.login_user, name='login'),
     path('logout/', views.logout_user, name='logout'),
     path('register/', views.register_user, name="register"),
-    path('checkout/', views.checkout, name='checkout'),
-    path('success/', views.payment_success, name='payment_success'),
-    path('cancel/', views.payment_cancel, name='payment_cancel'),
-     path('', views.home, name='home'),
-    
 ]
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, 
-                        document_root = settings.MEDIA_ROOT)
-
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

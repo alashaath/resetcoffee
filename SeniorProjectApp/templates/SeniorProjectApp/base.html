@@ -1,129 +1,293 @@
 <!DOCTYPE html>
-<html>
-    <head>
-      
-        {% load static %}
-        
-        {% load bootstrap5 %}
-        {% bootstrap_css %}
-        {% bootstrap_javascript %}
+<html lang="en">
+<head>
+    {% load static %}
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
 
-        {% block head %}
-        {% endblock %}
+    {% block head %}{% endblock %}
 
-        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-        <title>Reset Specialty Coffee</title>
-        <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Reset Specialty Coffee</title>
+    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
+    <style>
+        :root {
+            --cream: #F5EFE0;
+            --dark: #1A1208;
+            --roast: #2D1B00;
+            --espresso: #3D2200;
+            --amber: #C8821A;
+            --gold: #E8A840;
+            --foam: #FAF4E8;
+            --mid: #6B4C1E;
+            --muted: #7A6040;
+            --border: rgba(200, 130, 26, 0.18);
+        }
 
-    </head>
-    
-    <body style="background-color: rgb(48, 47, 47)">
-      {% if messages %}
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--cream);
+            color: var(--dark);
+            min-height: 100vh;
+        }
+
+        /* ── ALERTS ── */
+        .alert { border-radius: 0; border: none; border-left: 3px solid var(--amber); background: var(--foam); color: var(--roast); font-size: 0.875rem; }
+
+        /* ── NAV ── */
+        .site-nav {
+            background: var(--dark);
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+            position: sticky;
+            top: 0;
+            z-index: 200;
+            border-bottom: 1px solid rgba(200,130,26,0.2);
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+        }
+        .nav-logo img {
+            height: 38px;
+            width: auto;
+            filter: brightness(0) invert(1);
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .nav-links a {
+            color: rgba(245,239,224,0.6);
+            font-size: 0.75rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--gold); }
+        .nav-cart-btn {
+            background: none;
+            border: 1px solid rgba(200,130,26,0.45);
+            color: var(--gold);
+            padding: 0.4rem 1.1rem;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .nav-cart-btn:hover { background: var(--amber); color: var(--dark); border-color: var(--amber); }
+        .cart-badge {
+            background: var(--amber);
+            color: var(--dark);
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.65rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ── FOOTER ── */
+        .site-footer {
+            background: var(--dark);
+            padding: 3rem 2rem;
+            border-top: 1px solid rgba(200,130,26,0.15);
+            margin-top: 4rem;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .footer-col h4 {
+            font-size: 0.62rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        .footer-col p,
+        .footer-col li,
+        .footer-col address { font-size: 0.8rem; color: rgba(245,239,224,0.45); line-height: 1.9; list-style: none; font-style: normal; }
+        .footer-col a { color: rgba(245,239,224,0.45); text-decoration: none; transition: color 0.2s; }
+        .footer-col a:hover { color: var(--gold); }
+        .footer-map iframe { border-radius: 0; filter: grayscale(40%); }
+        .footer-bottom {
+            text-align: center;
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(200,130,26,0.1);
+            font-size: 0.68rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(245,239,224,0.2);
+        }
+
+        /* ── SHARED PAGE HEADER ── */
+        .page-header {
+            background: var(--dark);
+            padding: 3.5rem 2rem 2.5rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(200,130,26,0.15);
+        }
+        .page-header .eyebrow {
+            font-size: 0.62rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 0.75rem;
+        }
+        .page-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            color: var(--cream);
+            font-weight: 400;
+        }
+
+        /* ── BUTTONS ── */
+        .btn-reset-primary {
+            background: var(--roast);
+            color: var(--cream);
+            padding: 0.8rem 2rem;
+            border: none;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.78rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-reset-primary:hover { background: var(--amber); color: var(--dark); }
+        .btn-reset-outline {
+            background: none;
+            color: var(--roast);
+            padding: 0.8rem 2rem;
+            border: 1px solid var(--border);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.78rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            cursor: pointer;
+            font-weight: 400;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-reset-outline:hover { border-color: var(--amber); color: var(--amber); }
+        .btn-danger-reset {
+            background: none;
+            border: 1px solid rgba(180,60,40,0.35);
+            color: #a83222;
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 0.35rem 0.85rem;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.2s;
+        }
+        .btn-danger-reset:hover { background: #a83222; color: #fff; }
+    </style>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    {% if messages %}
         {% for message in messages %}
-          <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        {% endfor %}
-      {% endif %}
-      <header class="sticky-header d-flex flex-wrap align-items-center justify-content-between py-3 mb-4 border-bottom bg-dark" style="position: sticky; top: 0; z-index: 100;">
-          <a href="{% url 'home' %}"><img src="{% static 'Reset3.png' %}" class="img-fluid"></a>
-          <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
-              <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
-          </a>
-          <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-              <li>
-                  <a class="navbar-brand" href="{% url 'home' %}" style="color: white;">Home</a>
-              </li>
-
-              <li>
-                  <a class="nav-link" href="{% url 'menu' %}" style="color: white;">Menu</a>
-              </li>
-
-              <li>
-                  <a class="nav-link" href="{% url 'aboutus' %}" style="color: white;">About Us</a>
-              </li>
-              
-              {% if user.is_authenticated %}
-                <li>
-                  <a class="nav-link" href="{% url 'logout' %}" style="color: white;">Logout</a>
-                </li>
-              {% else %}    
-                <li>
-                  <a class="nav-link" href="{% url 'login' %}" style="color: white;">Login</a>
-                </li>
-                <li>
-                  <a class="nav-link" href="{% url 'register' %}" style="color: white;">Register</a>
-                </li>
-              {% endif %}
-
-              {% if user.is_authenticated and user.is_staff %}
-                <li>
-                  <a class="nav-link" href="{% url 'admin:index' %}" style="color: white;">Admin Page</a>
-                </li>
-              {% endif  %}
-    
-                <form class="d-flex">
-                  <a href="{% url 'cart' %}" class="btn btn-outline-light">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16">
-                      <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                    </svg> 
-                    <i class="bi-cart-fill me-1"></i>
-                    Cart
-                    <span class="badge bg-dark text-white ms-1 rounded-pill" id="cart_quantity">
-                      {{ cart_items|length }}
-                   </span>                   
-                  </a>
-                </form>
-
-          </ul>
-      </header>
-      
-      </div>
-
-        {% block content %} 
-        {% endblock %}
-        <footer class="bg-dark text-center text-lg-start">
-          <div class="container p-4">
-            <div class="row">
-              <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-                <h5 class="text-uppercase" style="color: white;">Contact Us</h5>
-                <address>
-                  <ul class="list-unstyled">
-                    <li style="color: white;">Phone:<a href="tel:(956) 270-3945">(956) 270-3945</a></li>
-                    <li style="color: white;">Email:<a href="mailto:sam207139@gmail.com"> sam207139@gmail.com</a></li> 
-                  </ul>
-                </address>
-              </div>
-              <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-                <h5 class="text-uppercase" style="color: white;">Follow Us</h5>
-                <a href="https://www.instagram.com/resetspecialtycoffee/" style="color: white; text-decoration: none;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-instagram" viewBox="0 0 16 16">
-                  <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"/>
-                </svg></a>
-              </div>
-              <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-                <h5 class="text-uppercase" style="color: white;">Hours</h5>
-                <ul class="list-unstyled">
-                  <li style="color: white;">Monday - 6:30 AM-8:30 PM</li>
-                  <li style="color: white;">Tuesday - 6:30 AM-8:30 PM</li>
-                  <li style="color: white;">Wednesday - 6:30 AM-8:30 PM</li>
-                  <li style="color: white;">Thursday - 6:30 AM-8:30 PM</li>
-                  <li style="color: white;">Friday - 6:30 AM-8:30 PM</li>
-                  <li style="color: white;">Saturday - 9 AM-8:30 PM</li>
-                  <li style="color: white;">Sunday - 1 PM-8:30 PM</li>
-                </ul>
-              </div>
-              <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-                <p style="text-align: center;">
-                  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2492.092528142061!2d-98.24833331035633!3d26.339000027241507!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8665a513a29b29fd%3A0x10fb5254376076eb!2sReset%20Specialty%20Coffee!5e0!3m2!1sen!2sus!4v1696026629466!5m2!1sen!2sus" width="100%" height="220" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                </p>
-              </div>
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-          </div>
-        </footer>        
-    </body>
+        {% endfor %}
+    {% endif %}
+
+    <nav class="site-nav">
+        <a href="{% url 'home' %}" class="nav-logo">
+            <img src="{% static 'Reset3.png' %}" alt="Reset Specialty Coffee" style="height: 36px; width: auto;">
+        </a>
+        <ul class="nav-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'menu' %}">Menu</a></li>
+            <li><a href="{% url 'aboutus' %}">About</a></li>
+            {% if user.is_authenticated and user.is_staff %}
+                <li><a href="{% url 'admin:index' %}">Admin</a></li>
+            {% endif %}
+        </ul>
+        <a href="https://order.toasttab.com/online/resetspecialtycoffee" target="_blank" class="nav-cart-btn">
+            Order Now
+        </a>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Contact Us</h4>
+                <address>
+                    <ul>
+                        <li>Phone: <a href="tel:(956) 270-3945">(956) 270-3945</a></li>
+                        <li>Email: <a href="mailto:sam207139@gmail.com">sam207139@gmail.com</a></li>
+                    </ul>
+                </address>
+            </div>
+            <div class="footer-col">
+                <h4>Follow Us</h4>
+                <ul>
+                    <li>
+                        <a href="https://www.instagram.com/resetspecialtycoffee/" target="_blank">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 24 24" style="margin-right:6px;vertical-align:middle">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                            @resetspecialtycoffee
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Hours</h4>
+                <ul>
+                    <li>Mon – Fri &nbsp;7:30 AM – 8:30 PM</li>
+                    <li>Saturday &nbsp;&nbsp;7:30 AM – 8:30 PM</li>
+                    <li>Sunday &nbsp;&nbsp;&nbsp;&nbsp;1:00 PM – 7:30 PM</li>
+                </ul>
+            </div>
+            <div class="footer-col footer-map">
+                <h4>Find Us</h4>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2492.092528142061!2d-98.24833331035633!3d26.339000027241507!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8665a513a29b29fd%3A0x10fb5254376076eb!2sReset%20Specialty%20Coffee!5e0!3m2!1sen!2sus!4v1696026629466!5m2!1sen!2sus" width="100%" height="180" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+        <div class="footer-bottom">© Reset Specialty Coffee · McAllen, Texas</div>
+    </footer>
+</body>
 </html>
