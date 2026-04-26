@@ -11,6 +11,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-^_@4z)o+l_4%y8frfg4x$
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ['*', 'resetcoffee.co', 'www.resetcoffee.co']
+CSRF_TRUSTED_ORIGINS = ['https://resetcoffee.co', 'https://www.resetcoffee.co', 'https://resetcoffee-production.up.railway.app']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
